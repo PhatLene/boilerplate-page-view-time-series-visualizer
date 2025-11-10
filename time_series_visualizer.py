@@ -5,15 +5,23 @@ from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
 
 # Import data (Make sure to parse dates. Consider setting index column to 'date'.)
-df = None
+df = pd.read_csv('fcc-forum-pageviews.csv', parse_dates= ['date'], index_col='date')
+
 
 # Clean data
-df = None
+low= df['value'].quantile(0.025)
+high= df['value'].quantile(0.975)
+df = df[(df['value'] >= low) & (df['value'] <= high)]
 
 
 def draw_line_plot():
     # Draw line plot
-
+    df_line= df.copy()
+    fig, ax= plt.subplots(figsize= (15, 5))
+    ax.plot(df_line.index, df_line['value'], color='r', linewidth= 1)
+    ax.set_title('Daily freeCodeCamp Forum Page Views 5/2016-12/2019')
+    ax.set_xlabel('Date')
+    ax.set_ylabel('Page Views')
 
 
 
@@ -24,11 +32,21 @@ def draw_line_plot():
 
 def draw_bar_plot():
     # Copy and modify data for monthly bar plot
-    df_bar = None
-
+    df_bar = df.copy()
+    df_bar['year']= df_bar.index.year
+    df_bar['month']= df_bar.index.month
+    
     # Draw bar plot
-
-
+    df_bar= df_bar.groupby(['year', 'month'])['value'].mean().unstack()
+    fig= df_bar.plot(kind='bar', figsize=(10,7)).figure
+    plt.xlabel('Years')
+    plt.ylabel('Average Page Views')
+    plt.legend(
+        title= 'Months', 
+        labels= ['January', 'February', 'March', 'April', 'June', 'July',
+                 'August', 'September', 'October', 'November', 'December']
+                 )
+    
 
 
 
@@ -43,6 +61,7 @@ def draw_box_plot():
     df_box['year'] = [d.year for d in df_box.date]
     df_box['month'] = [d.strftime('%b') for d in df_box.date]
 
+    month_order=
     # Draw box plots (using Seaborn)
 
 

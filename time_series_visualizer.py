@@ -43,7 +43,7 @@ def draw_bar_plot():
     plt.ylabel('Average Page Views')
     plt.legend(
         title= 'Months', 
-        labels= ['January', 'February', 'March', 'April', 'June', 'July',
+        labels= ['January', 'February', 'March', 'April', 'May', 'June', 'July',
                  'August', 'September', 'October', 'November', 'December']
                  )
     
@@ -61,11 +61,20 @@ def draw_box_plot():
     df_box['year'] = [d.year for d in df_box.date]
     df_box['month'] = [d.strftime('%b') for d in df_box.date]
 
-    month_order=
+    month_order= ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul',
+                  'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     # Draw box plots (using Seaborn)
+    fig, axes= plt.subplots(1, 2, figsize= (15,6))
 
+    sns.boxplot(x='year', y='value', data=df_box, ax= axes[0])
+    axes[0].set_title('Year-wise Box Plot (Trend)')
+    axes[0].set_xlabel('Year')
+    axes[0].set_ylabel('Page Views')
 
-
+    sns.boxplot(x='month', y='value', data=df_box, order=month_order, ax= axes[1])
+    axes[1].set_title('Month-wise Box Plot (Seasonality)')
+    axes[1].set_xlabel('Month')
+    axes[1].set_ylabel('Page Views')
 
 
     # Save image and return fig (don't change this part)
